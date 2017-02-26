@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 // GET Todos
 app.get('/todos', (req, res) => {
   Todo.find().then((todos) => {
-    res.send({todos: todos});
+    res.status().send({todos: todos});
   }, (e) => {
     res.status(400).send(e);
   });
