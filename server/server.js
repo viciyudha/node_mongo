@@ -26,10 +26,24 @@ app.post('/users', (req,res) => {
     return user.generateAuthToken();
     //res.send(user);
   }).then((token) => {
-    console.log(token);
+    //console.log(token);
     res.header('x-auth', token).send(user);
   }).catch((e) => {
     res.status(400).send(e);
+  });
+});
+
+// POST User Login
+app.post('/users/login', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+
+  User.findByCredentials(body.email, body.password).then((user) => {
+    return user.generateAuthToken().then((token) => {
+      console.log(token);
+       res.header('x-auth', token).send(user);
+     });
+  }).catch((e) => {
+    res.status(400).send();
   });
 });
 
