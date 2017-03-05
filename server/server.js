@@ -39,7 +39,7 @@ app.post('/users/login', (req, res) => {
 
   User.findByCredentials(body.email, body.password).then((user) => {
     return user.generateAuthToken().then((token) => {
-      console.log(token);
+      //console.log(token);
        res.header('x-auth', token).send(user);
      });
   }).catch((e) => {
@@ -50,6 +50,15 @@ app.post('/users/login', (req, res) => {
 // GET User/me
 app.get('/users/me', authenticate, (req,res) => {
   res.send(req.user);
+});
+
+// DELETE User Token
+app.delete('/users/me/token', authenticate, (req,res) => {
+  req.user.removeToken(req.token).then(() => {
+    res.status(200).send();
+  }, () => {
+    res.status(400).send();
+  });
 });
 
 // GET Todos
@@ -81,7 +90,7 @@ app.get('/todos/:id', (req, res) => {
 
 // POST Todos
 app.post('/todos', (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     var todo = new Todo({
       text: req.body.text
     });
